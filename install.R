@@ -1,0 +1,7 @@
+install.packages("Matrix")
+install.packages("Seurat")
+install.packages("ggplot2")
+install.packages("ggsci")
+install.packages("dplyr")
+install.packages("pheatmap")
+install.packages("RColorBrewer")
