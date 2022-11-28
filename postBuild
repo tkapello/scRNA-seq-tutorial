@@ -1,2 +1,2 @@
-wget -q -O GSE124872_raw_counts_single_cell http://bit.ly/2uh4s3g
-wget -q -O GSE124872_Angelidis_2018_metadata.csv http://bit.ly/2uh4s3g
+wget -q -O GSE124872_raw_counts_single_cell https://github.com/tkapello/scRNA-seq-tutorial/blob/main/
+wget -q -O GSE124872_Angelidis_2018_metadata.csv https://github.com/tkapello/scRNA-seq-tutorial/blob/main/
