@@ -1,0 +1,14 @@
+name: compositional-env
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - conda-forge::r-base==4.0.5
+  - install.packages("Matrix")
+  - install.packages("Seurat")
+  - install.packages("ggplot2")
+  - install.packages("ggsci")
+  - install.packages("dplyr")
+  - install.packages("pheatmap")
+  - install.packages("RColorBrewer")
+  - notebook
