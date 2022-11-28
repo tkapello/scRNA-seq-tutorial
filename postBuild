@@ -1,2 +1,2 @@
-wget -q -O GSE124872_raw_counts_single_cell https://github.com/tkapello/scRNA-seq-tutorial/tree/main/Data
-wget -q -O GSE124872_Angelidis_2018_metadata.csv https://github.com/tkapello/scRNA-seq-tutorial/tree/main/Data
+wget -q -O count_matrix.RData "https://github.com/tkapello/scRNA-seq-tutorial/tree/main/Data/GSE124872_raw_counts_single_cell.RData"
+#wget -q -O metadata.csv "https://github.com/tkapello/scRNA-seq-tutorial/tree/main/Data/GSE124872_Angelidis_2018_metadata.csv"
