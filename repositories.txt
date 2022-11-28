@@ -3,13 +3,12 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - r-base==4.0.5
-  - r-matrix==1.3_4
-  - r-seurat==4.1.0
-  - r-ggplot2==3.3.5
-  - r-ggsci==2.9
-  - r-dplyr==1.0.9
-  - r-pheatmap==1.0.12
-  - r-rcolorbrewer==1.1_3
+  - conda-forge::r-base==4.0.5
+  - conda-forge::r-matrix==1.3_4
+  - conda-forge::r-seurat==4.1.0
+  - conda-forge::r-ggplot2==3.3.5
+  - conda-forge::r-ggsci==2.9
+  - conda-forge::r-dplyr==1.0.9
+  - conda-forge::r-pheatmap==1.0.12
+  - conda-forge::r-rcolorbrewer==1.1_3
   - notebook
-  - conda-forge::r-statmod==1.4.37
