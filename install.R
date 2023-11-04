@@ -1,5 +1,7 @@
 install.packages("Matrix")
-remotes::install_version("Seurat", version="4.3.0")
+install.packages("Seurat")
+install.packages("SeuratObject")
+install.packages("igraph")
 install.packages("ggplot2")
 install.packages("ggsci")
 install.packages("dplyr")
