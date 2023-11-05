@@ -17,8 +17,6 @@ metadata<-read.csv('metadata.csv')
 # Load data
 seurat<-CreateSeuratObject(counts=as.matrix(counts), min.cells=5, min.features=80)
 
-# Add clinical information to samples
-
 # Decide on inflection point
 df<-data.frame(row.names=rownames(seurat@meta.data),
                cell=rownames(seurat@meta.data),
@@ -50,34 +48,6 @@ ggplot(df, aes(Gene, UMI))+
   xlab('Gene numbers')+
   theme_bw()
 
-df.new<-df[df$Gene>=200,]
-df.new<-df.new[order(df.new$UMI, decreasing=T),]
-df.new$index<-1:nrow(df.new)
-
-ggplot(df.new, aes(index, UMI))+
-  geom_point(size=0.1, show.legend=F)+
-  scale_y_log10()+
-  scale_x_log10()+
-  geom_hline(aes(yintercept=200))+
-  geom_hline(aes(yintercept=100), color='red')+
-  ylab('Transcripts numbers')+
-  xlab('cells sorted by UMI count')+
-  theme_bw()
-
-df.new<-df[df$UMI>=200,]
-df.new<-df.new[order(df.new$Gene, decreasing=T),]
-df.new$index<-1:nrow(df.new)
-
-ggplot(df.new, aes(index, Gene))+
-  geom_point(size=0.1, show.legend=F)+
-  scale_y_log10()+
-  scale_x_log10()+
-  geom_hline(aes(yintercept=150))+
-  geom_hline(aes(yintercept=100), color='red')+
-  ylab('Gene numbers')+
-  xlab('cells sorted by gene count')+
-  theme_bw()
-
 # Filter on number of genes
 quantile(seurat$nFeature_RNA, probs=c(0.25, 0.5, 0.75, 0.95, 0.99))
 seurat<-subset(seurat, subset=nFeature_RNA>=200)
@@ -86,7 +56,7 @@ seurat<-subset(seurat, subset=nFeature_RNA>=200)
 seurat[["percent.mt"]]<-PercentageFeatureSet(object=seurat, pattern="^mt-")
 quantile(seurat$percent.mt, probs=(seq(0, 1, by=0.25)))
 
-seurat<-subset(seurat, subset=percent.mt<=20)
+seurat<-subset(seurat, subset=percent.mt<=10)
 
 # QC analysis
 Idents(seurat)<-'orig.ident'
@@ -120,17 +90,22 @@ DimHeatmap(object=seurat, dims=1:10, cells=500, balanced=TRUE)
 ElbowPlot(object=seurat, ndims=50)
 
 # Find k-nearest neighbours
-seurat<-FindNeighbors(object=seurat, reduction='pca', dims=1:30)
-
-# Find clusters
-seurat<-FindClusters(object=seurat, resolution=0.6, group.singletons=T)
+seurat<-FindNeighbors(object=seurat, reduction='pca', dims=1:20)
 
 # Run UMAP
-seurat<-RunUMAP(object=seurat, reduction="harmony", dims=1:30, verbose=F)
+seurat<-RunUMAP(object=seurat, reduction="pca", dims=1:20, verbose=F)
 DimPlot(object=seurat, reduction='umap', label=T)
 
-# Look for potential batches
-DimPlot(seurat, group.by='') + scale_color_jco()
-DimPlot(seurat, group.by='') + scale_color_npg()
+# Find clusters
+seurat<-FindClusters(object=seurat, resolution=0.8, group.singletons=T)
 
-# Calculate DE genes
+# Look for potential batches
+DimPlot(seurat, group.by='orig.ident') + scale_color_jco()
+
+# Calculate cluster markers
+deg<-FindAllMarkers(seurat, min.pct=0.20, logfc.threshold=0.25, test.use='MAST', only.pos=T)
+deg<-deg[deg$p_val_adj<=0.05,]
+deg<-deg %>% arrange(cluster, -avg_log2FC)
+deg5<-deg %>% group_by(cluster) %>% top_n(n=5, wt=avg_log2FC)
+
+DotPlot(object=seurat, features=unique(deg5$gene), cols='RdBu', dot.scale=6, dot.min=0.1) + RotatedAxis()
